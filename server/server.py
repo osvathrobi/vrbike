@@ -12,8 +12,11 @@ from arduino import Arduino
 import pygame
 from pygame.locals import *
 
-pygame.init()
-pygame.joystick.init()
+try:
+  pygame.init()
+  pygame.joystick.init()
+except:
+  print "No joysticks found.."
 
 my_joystick = None
 joystick_names = []
@@ -27,11 +30,11 @@ if (len(joystick_names) > 0):
   my_joystick = pygame.joystick.Joystick(0)
   my_joystick.init()
 
-max_joy = max(my_joystick.get_numaxes(), 
+if(my_joystick):
+  max_joy = max(my_joystick.get_numaxes(), 
                       my_joystick.get_numbuttons(), 
                       my_joystick.get_numhats())
 
-print(max_joy);
 
 def check_button(self, p_button):
   if (self.my_joystick):
@@ -74,7 +77,6 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
             packet = (512,512,1,0)
         
         # result = "0,0"
-        print packet;
         g_keys = pygame.event.get()
 
         d = 0;
@@ -86,7 +88,8 @@ class TestHandler(SimpleHTTPServer.SimpleHTTPRequestHandler):
         #    if(i==1):
         #      d = -1;
         
-        for i in range(0, my_joystick.get_numaxes()):
+        if(my_joystick):
+          for i in range(0, my_joystick.get_numaxes()):
                 if (my_joystick.get_axis(i)):
                   if(i==3):
                     d = -my_joystick.get_axis(i);
